@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Juli | 7 meses ♥</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: #29132F;
+  color: #FFF0F5;
+  font-family: monospace;
+}
+
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow-x: hidden;
+}
+
+main {
+  width: min(100%, 850px);
+  padding: 16px;
+  text-align: center;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.caption {
+  color: #FFD0DF;
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin: 12px;
+}
+
+button {
+  background: #FF9FC5;
+  color: #381A38;
+  border: 3px solid #FFF0F5;
+  padding: 12px 20px;
+  font-family: monospace;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 4px 4px #381A38;
+}
+
+button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px #381A38;
+}
+
+#letter {
+  display: none;
+  max-width: 560px;
+  margin: 18px auto;
+  padding: 22px;
+  background: #FFE0E9;
+  border: 5px solid #F58EAA;
+  outline: 3px solid #FFD0DF;
+  color: #57234F;
+  text-align: left;
+  line-height: 1.8;
+  font-size: 14px;
+  white-space: pre-line;
+}
+
+#letter strong {
+  color: #A83E78;
+}
+</style>
+</head>
+
+<body>
+<main>
+  <canvas id="world" width="240" height="320"></canvas>
+
+  <div class="caption">
+    ✦ UN PEQUEÑO UNIVERSO PARA JULI ✦
+  </div>
+
+  <button id="open">LEER MI CARTA ♥</button>
+
+  <article id="letter">
+<strong>Para Juli, mi mapachita especial :3:</strong>
+
+Weñaaaaaaaaaaaaaash, como estas mi amor, hoy cumplimos 7 mesesitooooooos, yeiiiiiii, gracias por ser mi pololita mapachita, te amo mucho mi amor, la verdad tenia planeado otro regalo xd pero eso sera para el mes que viene, te amo mucho mi amorcito linda, te amo mi amor, gracias por estos 7 mesesitos y mas bien perdon y gracias por aguantarme tanto xd no se como le haces xdddddd, pelo nunca me dejes mi amor, yo nunca me voy a cansar de ti mapachita, asi que si algun dia dudas si te amo tu me llamas y te digo mil veces te amo, bueño mi amor, ya casi se va a acabar el año, va a ser el primerito que vamos a pasar juntitos, epelo disfrutes el regalito amor, me toco imtpovisar este porque no te queria estresar con el otro regalo que si es mas dificil, solo por si acaso te doy la pista que vas a tener que resolver muchos acertijos, aun estas a tiempo de que lo corriga pero realmente para poder ganar en el regalito vas a tener que incluso usar google para investigar porque tienes que encontrar pistas que son dificiles de econtrar, va a ser algo bastante dificil la verdad pero sinceramente amor, lo hago con todo el cariño del mundo
+bueño mapachita, tu cuidate mi amor, y tambien disfruta de este septimo mesesito, lo voy a dar todo por ti mi amor, vas a ver como gano año xd, te amo mi amor, ya te mereces descansar, aprovecha que ya casi entras a vacaciones y descansas mi amor, te amo mucho mi mapachita linda
+bueño joshua cartero se despide, chau mi juli hermosa
+te amo mucho mi amor, te amoooooooooo
+que te vaya bieeen
+mucha suerteeeee
+te amo muchitoooooooo
+babaaaaaai
+byeeeeeeeee
+chauuuuu
+te amo mapachita linda
+te amo mucho mi juli hermosa
+gracias por estos 7 mesesitos mi amor, te amo mucho mi amor
+que te vaya bieeeen
+te amooooooo, chau mapachita lindaaaaaaaaa, chauuuuu
+te amo mucho mi amor
+por cierto, voy a ver si te regalo algo de steam este mes, solo dejame que reuna plata y te lo compro XDDDDDDDDD
+chau mi amor
+gracias por todo y perdon por todo
+joshua cartero se despide
+cuidateeeeee
+suerteeeeechau amooooor
+byeeeeeeee
+te amooooooooo
+
+:D
+
+:]
+
+:3
+
+</article>
+</main>
+
+<script>
+const canvas = document.getElementById("world");
+const ctx = canvas.getContext("2d");
+
+ctx.imageSmoothingEnabled = false;
+
+const W = 240;
+const H = 320;
+
+const C = {
+  sky: "#29132F",
+  sky2: "#482044",
+  navy: "#57234F",
+  deep: "#79305F",
+  ocean: "#A83E78",
+  teal: "#C6538B",
+  aqua: "#E477A8",
+  foam: "#FFD0DF",
+  white: "#FFF0F5",
+  cream: "#FFE0E9",
+  gold: "#FFC0D2",
+  coral: "#F58EAA",
+  pink: "#FF9FC5",
+  rose: "#D95D91",
+  purple: "#A65B9A",
+  lilac: "#D6A0CF",
+  dark: "#381A38"
+};
+
+let frame = 0;
+
+function pixel(x, y, color, size = 1) {
+  ctx.fillStyle = color;
+  ctx.fillRect(
+    Math.floor(x),
+    Math.floor(y),
+    size,
+    size
+  );
+}
+
+function rect(x, y, w, h, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, w, h);
+}
+
+// Fuente pixelada: cada carácter es una matriz.
+const FONT = {
+  "A":["01110","10001","10001","11111","10001","10001","10001"],
+  "B":["11110","10001","10001","11110","10001","10001","11110"],
+  "C":["01111","10000","10000","10000","10000","10000","01111"],
+  "D":["11110","10001","10001","10001","10001","10001","11110"],
+  "E":["11111","10000","10000","11110","10000","10000","11111"],
+  "F":["11111","10000","10000","11110","10000","10000","10000"],
+  "G":["01111","10000","10000","10111","10001","10001","01111"],
+  "H":["10001","10001","10001","11111","10001","10001","10001"],
+  "I":["111","010","010","010","010","010","111"],
+  "J":["00111","00010","00010","00010","10010","10010","01100"],
+  "K":["10001","10010","10100","11000","10100","10010","10001"],
+  "L":["10000","10000","10000","10000","10000","10000","11111"],
+  "M":["10001","11011","10101","10101","10001","10001","10001"],
+  "N":["10001","11001","10101","10011","10001","10001","10001"],
+  "O":["01110","10001","10001","10001","10001","10001","01110"],
+  "P":["11110","10001","10001","11110","10000","10000","10000"],
+  "Q":["01110","10001","10001","10001","10101","10010","01101"],
+  "R":["11110","10001","10001","11110","10100","10010","10001"],
+  "S":["01111","10000","10000","01110","00001","00001","11110"],
+  "T":["11111","00100","00100","00100","00100","00100","00100"],
+  "U":["10001","10001","10001","10001","10001","10001","01110"],
+  "V":["10001","10001","10001","10001","10001","01010","00100"],
+  "W":["10001","10001","10001","10101","10101","11011","10001"],
+  "X":["10001","10001","01010","00100","01010","10001","10001"],
+  "Y":["10001","10001","01010","00100","00100","00100","00100"],
+  "Z":["11111","00001","00010","00100","01000","10000","11111"],
+  "7":["11111","00001","00010","00100","01000","01000","01000"],
+  "♥":["01010","11111","11111","11111","01110","00100","00000"],
+  " ":["000","000","000","000","000","000","000"]
+};
+
+function textPixel(str, x, y, color, scale = 1) {
+  let cursor = x;
+
+  for (const ch of str.toUpperCase()) {
+    const matrix = FONT[ch] || FONT[" "];
+
+    for (let row = 0; row < matrix.length; row++) {
+      for (let col = 0; col < matrix[row].length; col++) {
+        if (matrix[row][col] === "1") {
+          rect(
+            cursor + col * scale,
+            y + row * scale,
+            scale,
+            scale,
+            color
+          );
+        }
+      }
+    }
+
+    cursor += (matrix[0].length + 1) * scale;
+  }
+}
+
+function stars() {
+  for (let i = 0; i < 55; i++) {
+    const x = (i * 47 + 13) % W;
+    const y = (i * 29 + 7) % 145;
+    const blink = Math.sin(frame * 0.04 + i);
+
+    pixel(
+      x,
+      y,
+      blink > 0.2 ? C.gold : C.lilac
+    );
+
+    if (i % 7 === 0) {
+      pixel(x + 1, y, C.white);
+    }
+  }
+}
+
+function moon() {
+  const rows = [
+    "00111100",
+    "01111110",
+    "11111100",
+    "11111000",
+    "11111000",
+    "01111100",
+    "00111110",
+    "00011100"
+  ];
+
+  rows.forEach((r, dy) => {
+    [...r].forEach((v, dx) => {
+      if (v === "1") {
+        pixel(178 + dx, 27 + dy, C.cream, 2);
+      }
+    });
+  });
+
+  pixel(180, 28, C.white, 2);
+}
+
+function ocean() {
+  rect(0, 145, W, 175, C.navy);
+
+  for (let y = 0; y < 175; y++) {
+    let col =
+      y < 25 ? C.deep :
+      y < 70 ? C.ocean :
+      y < 115 ? C.teal :
+      C.deep;
+
+    rect(0, 145 + y, W, 1, col);
+  }
+
+  // Cinco capas de olas en movimiento.
+  for (let layer = 0; layer < 5; layer++) {
+    const base = 151 + layer * 27;
+
+    for (let x = 0; x < W; x += 3) {
+      const wave =
+        Math.sin(
+          (x + frame * (layer + 1) * 0.45) * 0.09 + layer
+        ) * 4;
+
+      const yy = base + wave;
+      const color = layer % 2 === 0 ? C.aqua : C.ocean;
+
+      pixel(x, yy, color, 2);
+
+      if ((x + layer * 11) % 23 === 0) {
+        pixel(x, yy - 1, C.foam);
+      }
+    }
+  }
+
+  // Reflejo de la luna.
+  for (let i = 0; i < 30; i++) {
+    const x = 130 + Math.sin(i * 2 + frame * 0.025) * 15;
+    const y = 157 + i * 4;
+    const width = Math.max(1, 9 - Math.floor(i / 4));
+
+    for (let j = 0; j < width; j++) {
+      pixel(
+        x + j,
+        y,
+        i % 3 === 0 ? C.gold : C.aqua
+      );
+    }
+  }
+
+  // Espuma y partículas.
+  for (let i = 0; i < 30; i++) {
+    const x = (i * 37 + frame * 0.5) % W;
+    const y = 205 + Math.sin(i + frame * 0.03) * 70;
+
+    if (i % 3 === 0) {
+      pixel(x, y, C.foam, 2);
+    } else {
+      pixel(x, y, C.cream);
+    }
+  }
+}
+
+function heart(x, y, color) {
+  const pattern = [
+    "01100110",
+    "11111111",
+    "11111111",
+    "01111110",
+    "00111100",
+    "00011000"
+  ];
+
+  pattern.forEach((r, dy) => {
+    [...r].forEach((v, dx) => {
+      if (v === "1") {
+        pixel(x + dx, y + dy, color);
+      }
+    });
+  });
+}
+
+function flower(x, y) {
+  pixel(x + 2, y, C.pink, 2);
+  pixel(x, y + 2, C.coral, 2);
+  pixel(x + 4, y + 2, C.lilac, 2);
+  pixel(x + 2, y + 4, C.rose, 2);
+  pixel(x + 2, y + 2, C.gold, 2);
+  pixel(x + 2, y + 6, C.teal);
+  pixel(x + 2, y + 7, C.teal);
+}
+
+function letter() {
+  // Sombra.
+  rect(34, 91, 176, 116, C.dark);
+
+  // Papel y borde.
+  rect(30, 87, 176, 116, C.gold);
+  rect(33, 90, 170, 110, C.cream);
+  rect(37, 94, 162, 102, C.white);
+
+  // Borde compuesto de píxeles.
+  for (let x = 30; x < 206; x += 4) {
+    pixel(x, 87, C.white, 3);
+    pixel(x, 200, C.coral, 3);
+  }
+
+  for (let y = 91; y < 200; y += 4) {
+    pixel(30, y, C.pink, 3);
+    pixel(203, y, C.pink, 3);
+  }
+
+  // Decoraciones.
+  flower(39, 97);
+  flower(184, 97);
+  heart(113, 96, C.coral);
+
+  textPixel("PARA JULI", 76, 116, C.rose, 2);
+  textPixel("7 MESES", 88, 137, C.purple, 2);
+
+  for (let i = 0; i < 5; i++) {
+    rect(
+      58,
+      158 + i * 7,
+      120 - (i % 2) * 13,
+      1,
+      C.lilac
+    );
+  }
+
+  heart(115, 181, C.coral);
+}
+
+function beach() {
+  rect(0, 292, W, 28, C.deep);
+
+  for (let x = 0; x < W; x += 4) {
+    pixel(x, 295, C.gold, 2);
+
+    if (x % 3 === 0) {
+      pixel(x, 305, C.cream);
+    }
+  }
+
+  flower(20, 275);
+  flower(207, 280);
+}
+
+function draw() {
+  frame++;
+
+  rect(0, 0, W, H, C.sky);
+  rect(0, 100, W, 45, C.sky2);
+
+  stars();
+  moon();
+  ocean();
+  beach();
+  letter();
+
+  // Estrellas flotantes.
+  for (let i = 0; i < 8; i++) {
+    const x = (i * 31 + frame * 0.2) % W;
+    const y = 230 + Math.sin(frame * 0.035 + i) * 35;
+
+    pixel(x, y, C.white);
+    pixel(x + 1, y, C.gold);
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+
+// Abrir y cerrar la carta.
+document.getElementById("open").addEventListener("click", () => {
+  const letter = document.getElementById("letter");
+
+  letter.style.display =
+    letter.style.display === "block" ? "none" : "block";
+
+  document.getElementById("open").textContent =
+    letter.style.display === "block"
+      ? "CERRAR CARTA ♥"
+      : "LEER MI CARTA ♥";
+});
+</script>
+</body>
+</html>
